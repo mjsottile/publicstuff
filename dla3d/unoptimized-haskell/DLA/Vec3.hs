@@ -12,8 +12,8 @@ randVec :: Double -> DLAMonad Vec3
 randVec r = do
   phi <- nextF (2.0 * pi)  -- phi ranges from 0.0 to 2.0*pi
   z <- nextF (2.0 * r)
-  let z = z - r    -- z ranges from -r to r
-  let theta = asin (z / r)
+  z <- return $ z - r    -- z ranges from -r to r
+  theta <- return $ asin (z / r)
   return $ Vec3 (r*(cos theta)*(cos phi)) (r*(cos theta)*(sin phi)) z
 
 randUnitVec :: DLAMonad Vec3
