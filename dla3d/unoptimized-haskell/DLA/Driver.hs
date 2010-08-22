@@ -69,24 +69,24 @@ walk_particle params pos kdt n = do
   step <- randVec (step_size params)
 
   -- 2. walk current position to new position using step
-  pos' <- return $ vecAdd pos step
+  let pos' = vecAdd pos step
 
   -- 3. compute norm of new position (used to see if it wandered too far)
-  distance <- return $ vecNorm pos'
+  let distance = vecNorm pos'
 
   -- 4. check if the move from pos to pos' will collide with any known
   --    particles already part of the aggregate
-  collide <- return $ kdtCollisionDetect kdt pos pos' (epsilon params)
+  let collide = kdtCollisionDetect kdt pos pos' (epsilon params)
 
   -- 5. sample to see if it sticks
   doesStick <- sticks params
 
   -- 6. termination test : did we collide with one or more members of the
   --    aggregate, and if so, did we stick?
-  termTest <- return $ (length collide) > 0 && doesStick
+  let termTest = (length collide) > 0 && doesStick
 
   -- 7. have we walked into the death zone?
-  deathTest <- return (distance > (death_rad params))
+  let deathTest = (distance > (death_rad params))
 
   -- check termination test
   case termTest of
@@ -152,10 +152,10 @@ main :: IO ()
 main = do
   args <- getArgs
   validateArgs args
-  configFile <- return $ head args
-  outputFile <- return $ head (tail args)
+  let configFile = head args
+  let outputFile = head (tail args)
   params <- readParameters configFile
-  ((params', t'), rngState) <- return $ runRmonad (driver params) 
-                                                  (pureMT (Prelude.fromIntegral $ rng_seed params))
+  let ((params', t'), rngState) = runRmonad (driver params) 
+                                            (pureMT (Prelude.fromIntegral $ rng_seed params))
   dumpKDTree t' outputFile
   return ()
