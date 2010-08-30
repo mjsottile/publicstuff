@@ -1,0 +1,5 @@
+To build:
+
+ghc --make ff.hs
+
+The Matlab code is in forestfire.m and has been tested on the 2009b release.
