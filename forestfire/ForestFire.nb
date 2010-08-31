@@ -1,0 +1,289 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     10158,        280]
+NotebookOptionsPosition[      9276,        247]
+NotebookOutlinePosition[      9615,        262]
+CellTagsIndexPosition[      9572,        259]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Forest Fire in Mathematica", "Section",
+ CellChangeTimes->{{3.492233078588449*^9, 3.492233104900975*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["mjsottile@computer.org", "Subsubsection",
+ CellChangeTimes->{{3.492233106651128*^9, 3.492233109964944*^9}}],
+
+Cell["Parameters :", "Text",
+ CellChangeTimes->{{3.49223313157456*^9, 3.492233133347768*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "0.96"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"f", "=", "0.995"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"m", "=", "100"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"n", "=", "100"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.492231292927762*^9, 3.492231298524083*^9}, {
+  3.492232509580784*^9, 3.492232511900169*^9}, {3.492232542660626*^9, 
+  3.492232552450761*^9}, {3.4922327161498203`*^9, 3.492232718788226*^9}, {
+  3.4922327581643257`*^9, 3.492232758242696*^9}, {3.492232797457488*^9, 
+  3.492232799096889*^9}, {3.492233303581974*^9, 3.4922333050470333`*^9}}],
+
+Cell["Initialize empty world :", "Text",
+ CellChangeTimes->{{3.492233135247465*^9, 3.4922331375958157`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"world", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "m"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "1", ",", "n"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.49223130170652*^9, 3.492231364571967*^9}, {
+  3.492232514045087*^9, 3.492232517340769*^9}}],
+
+Cell["Function implementing the transition rule :", "Text",
+ CellChangeTimes->{{3.4922331393872843`*^9, 3.492233150531529*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"RuleFunction", "[", 
+    RowBox[{"{", 
+     RowBox[{"cellstate_", ",", "nburning_"}], "}"}], "]"}], " ", ":=", " ", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Switch", "[", 
+    RowBox[{"cellstate", ",", "\[IndentingNewLine]", "0", ",", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"RandomReal", "[", "1", "]"}], ">", "p"}], ",", "1", ",", 
+       "0"}], "]"}], ",", "\[IndentingNewLine]", "1", ",", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"nburning", ">", "0"}], ",", "2", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"RandomReal", "[", "1", "]"}], ">", "f"}], ",", "2", ",", 
+         "1"}], "]"}]}], "]"}], ",", "\[IndentingNewLine]", "2", ",", "0"}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.492231397311816*^9, 3.492231467701659*^9}, {
+  3.492231522724949*^9, 3.492231596314055*^9}, {3.492233211363175*^9, 
+  3.492233228794077*^9}}],
+
+Cell["\<\
+Function that takes the world and invokes the transition rule.  Not sure how \
+clean the code is to count the neighbors at every point and pass that down to \
+the transition rule.\
+\>", "Text",
+ CellChangeTimes->{{3.492233154728894*^9, 3.49223320817745*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ForestFire", "[", "world_", "]"}], " ", ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"burning", ",", "nburning", ",", "annotated"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"burning", " ", "=", " ", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{"Function", "[", 
+          RowBox[{"x", ",", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"x", "\[Equal]", "2"}], ",", "1", ",", "0"}], "]"}]}], 
+          "]"}], ",", "world", ",", 
+         RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"nburning", " ", "=", " ", 
+       RowBox[{"ListConvolve", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"1", ",", "1", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "0", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"1", ",", "1", ",", "1"}], "}"}]}], "}"}], ",", "burning",
+          ",", "2"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"annotated", " ", "=", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"world", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "[", 
+            RowBox[{"[", "j", "]"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"nburning", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "[", 
+            RowBox[{"[", "j", "]"}], "]"}]}], "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", 
+           RowBox[{"Length", "[", "world", "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"j", ",", "1", ",", 
+           RowBox[{"Length", "[", 
+            RowBox[{"world", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"Map", "[", 
+       RowBox[{"RuleFunction", ",", "annotated", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.4922304142287197`*^9, 3.492230428879224*^9}, {
+  3.492230477223074*^9, 3.4922304940214777`*^9}, {3.492230525431044*^9, 
+  3.492230529204095*^9}, {3.492230933806788*^9, 3.492231072707597*^9}, {
+  3.492231224477613*^9, 3.4922312295397177`*^9}, {3.492231260297104*^9, 
+  3.492231290135056*^9}, {3.492231369067932*^9, 3.492231378651709*^9}, {
+  3.492232149687245*^9, 3.492232160828712*^9}, {3.492232281243425*^9, 
+  3.4922323413433533`*^9}, {3.492232380384542*^9, 3.4922323873578987`*^9}, {
+  3.492232418438058*^9, 3.4922324561643953`*^9}, {3.492233184072296*^9, 
+  3.492233185919506*^9}}],
+
+Cell["Now iterate the function for 300 time steps.", "Text",
+ CellChangeTimes->{{3.492233249414657*^9, 3.492233254231428*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"l", "=", 
+   RowBox[{"NestList", "[", 
+    RowBox[{"ForestFire", ",", "world", ",", "300"}], "]"}]}], ";"}]], "Input",\
+
+ CellChangeTimes->{{3.492232632320241*^9, 3.492232651142935*^9}, {
+  3.4922327895633593`*^9, 3.492232789648128*^9}}],
+
+Cell["\<\
+Plot the iterated function showing the evolution of the model.\
+\>", "Text",
+ CellChangeTimes->{{3.492233258111699*^9, 3.492233270958951*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Animate", "[", 
+  RowBox[{
+   RowBox[{"ArrayPlot", "[", 
+    RowBox[{"l", "[", 
+     RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", "300", ",", "1"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.492232678093731*^9, 3.4922326963096743`*^9}, {
+  3.492232791114496*^9, 3.492232791169877*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`i$$ = 28, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`i$$], 1, 300, 1}}, Typeset`size$$ = {
+    360., {177., 182.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i$56771$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`i$$ = 1}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`i$$, $CellContext`i$56771$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> ArrayPlot[
+        Part[$CellContext`l, $CellContext`i$$]], 
+      "Specifications" :> {{$CellContext`i$$, 1, 300, 1, 
+         AppearanceElements -> {
+          "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+           "DirectionButton"}}}, 
+      "Options" :> {
+       ControlType -> Animator, AppearanceElements -> None, 
+        SynchronousUpdating -> True, ShrinkingDelay -> 10.}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{403., {214.34375, 219.65625}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.492232699198205*^9, 3.4922327874410458`*^9}, {
+  3.4922328237728977`*^9, 3.4922328340493317`*^9}, {3.492233331911826*^9, 
+  3.492233347410327*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{640, 677},
+WindowMargins->{{80, Automatic}, {17, Automatic}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (January 30, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 111, 1, 67, "Section"],
+Cell[CellGroupData[{
+Cell[703, 27, 113, 1, 24, "Subsubsection"],
+Cell[819, 30, 93, 1, 26, "Text"],
+Cell[915, 33, 644, 13, 73, "Input"],
+Cell[1562, 48, 108, 1, 26, "Text"],
+Cell[1673, 51, 389, 10, 27, "Input"],
+Cell[2065, 63, 127, 1, 26, "Text"],
+Cell[2195, 66, 1001, 25, 103, "Input"],
+Cell[3199, 93, 268, 5, 41, "Text"],
+Cell[3470, 100, 2886, 70, 178, "Input"],
+Cell[6359, 172, 126, 1, 26, "Text"],
+Cell[6488, 175, 272, 7, 27, "Input"],
+Cell[6763, 184, 152, 3, 26, "Text"],
+Cell[CellGroupData[{
+Cell[6940, 191, 364, 9, 27, "Input"],
+Cell[7307, 202, 1929, 40, 451, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
