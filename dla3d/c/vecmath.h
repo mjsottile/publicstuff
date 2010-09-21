@@ -13,7 +13,7 @@
 /*
  Data structure defining a point in KDT_DIM-space
  */
-#define KDT_DIM (2)
+#define KDT_DIM (3)
 typedef struct point {
 	float coord[KDT_DIM];
 } point;
