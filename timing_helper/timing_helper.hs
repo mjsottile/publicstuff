@@ -25,8 +25,8 @@ main = do
   [cmd,n] <- getArgs
   let cmds = replicate (read n) cmd
   times <- mapM time cmds
-  let avg = (foldr (+) 0.0 times)/(read n)
-  let stddev = sqrt ((foldr (+) 0.0 (map (\i -> ((i-avg)*(i-avg))) times))/((read n)-1))
+  let avg = (sum times)/(read n)
+  let stddev = sqrt ((sum (map (\i -> ((i-avg)*(i-avg))) times))/((read n)-1))
   printf "Average: %0.4f sec\n" (avg :: Double)
   printf "Std Dev: %0.4f sec\n" (stddev :: Double)
   
