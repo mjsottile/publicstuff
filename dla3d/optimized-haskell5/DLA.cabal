@@ -1,0 +1,22 @@
+Name:            DLA
+Version:         0.1.0
+Cabal-Version:   >= 1.2
+License:         BSD3
+License-File:    LICENSE
+Copyright:       (c) 2009-2010 Matthew Sottile
+Author:          Matthew Sottile
+Maintainer:      Matthew Sottile <mjsottile@computer.org>
+Stability:       alpha
+Homepage:        http://github.com/hsdla/
+Category:        Science
+Synopsis:        3D Diffusion Limited Aggregation simulation
+Build-Type:      Simple
+Description:     3d Diffusion Limited Aggregation algorithm in Haskell
+
+Library
+  Build-Depends: base==4.*, mtl, haskell98, random, mersenne-random-pure64
+  Exposed-modules:
+    DLA.ConfigurationReader DLA.Vec3 DLA.KDTree DLA.Params DLA.Rmonad
+
+Executable DLA
+  Main-Is: DLA/Driver.hs
