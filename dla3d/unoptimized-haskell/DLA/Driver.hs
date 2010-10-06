@@ -42,7 +42,7 @@ update_params :: DLAParams -> Vec3 -> DLAParams
 update_params params pos =
   DLAParams { stickiness = (stickiness params),
               death_rad = death_radius mir cmr imult ss omult,
-              starting_rad = trace ((show (vecNorm pos))++" "++(show new_srad)) new_srad,
+              starting_rad = new_srad,
               min_inner_rad = mir,
               inner_mult = imult,
               outer_mult = omult,
@@ -120,7 +120,7 @@ singleStep params kdt n = do
   sv <- randVec (starting_rad params)
   newp <- walk_particle params sv kdt n
   case newp of
-    Just p -> do return $ trace ("Particles so far: "++(show n)) p
+    Just p -> return p
     Nothing -> singleStep params kdt n
 
 nsteps :: DLAParams -> DLANode -> Int 
