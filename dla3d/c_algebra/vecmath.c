@@ -73,24 +73,23 @@ inline void vec_copy(point *dst, point *src) {
 inline void vec_zero(vec *dst) {
 	int i;
 	for(i=0; i < KDT_DIM; i++) {
-		dst->coord[i] = 0.0f;
+		dst->coord[i] = 0.0;
 	}
 }
 
 inline void vec_rand_unit(vec *dst) {
 	if(KDT_DIM == 2) {
 		// my trig sucks, this is from http://www.cs.cmu.edu/~mws/rpos.html
-	  double phi = randomdouble() * (2.0f * M_PI);
+	  double phi = randomdouble() * (2.0 * M_PI);
 	  dst->coord[0] = cos(phi);
 	  dst->coord[1] = sin(phi);
 	}
 	else if(KDT_DIM == 3) {
 	  // my trig sucks, this is from http://www.cs.cmu.edu/~mws/rpos.html
-	  double phi = randomdouble() * (2.0f * M_PI);
-	  double z = randomdouble() * 2.0f - 1.0f;
-	  double theta = asin(z);
-	  dst->coord[0] = cos(theta) * cos(phi);
-	  dst->coord[1] = cos(theta) * sin(phi);
+	  double phi = randomdouble() * (2.0 * M_PI);
+	  double z = randomdouble() * 2.0 - 1.0;
+	  dst->coord[0] = sqrt(1.0 - z*z) * cos(phi);
+	  dst->coord[1] = sqrt(1.0 - z*z) * sin(phi);
 	  dst->coord[2] = z;
 	}
 	else {

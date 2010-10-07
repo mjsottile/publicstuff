@@ -9,7 +9,10 @@ runner exe = do
 
 main :: IO ()
 main = defaultMain [
-        bgroup "DLA" [ bench "unopt" $ whnfIO $runner "unoptimized-haskell/dist/build/DLA/DLA params.in test.dat"
+        bgroup "DLA" [ 
+          bench "c" $ whnfIO $ runner "c/ktm c-version.kdtrc" 
+        , bench "c_algebra" $ whnfIO $ runner "c_algebra/ktm c-version.kdtrc" 
+        , bench "unopt" $ whnfIO $runner "unoptimized-haskell/dist/build/DLA/DLA params.in test.dat"
         , bench "opt1" $ whnfIO $ runner "optimized-haskell1/dist/build/DLA/DLA params.in test.dat" 
         , bench "opt2" $ whnfIO $ runner "optimized-haskell2/dist/build/DLA/DLA params.in test.dat" 
         , bench "opt3" $ whnfIO $ runner "optimized-haskell3/dist/build/DLA/DLA params.in test.dat" 
