@@ -1,0 +1,35 @@
+;; example parameters
+(
+  (seed 11)
+
+  ;; number of particles
+  (n 10000)
+
+  ;; maximum time to run before terminating computation
+  (max_secs 1000)
+
+  ;; collision epsilon
+  (epsilon 0.05)
+
+  ;; step size for random walk
+  (step_size 0.075)
+
+  ;; stickiness parameter, uniform across all points
+  (stickiness 1.0)
+
+  ;; minimum inner sphere radius for when not many points exist yet.
+  (min_inner_radius 1.0)
+
+  ;; scaling factor for pushing inner sphere out from maximum extent of
+  ;; current growth
+  (inner_mult 2.0)
+
+  ;; scaling factor for the outer sphere relative to the inner
+  (outer_mult 1.0)
+
+  ;; filename to put the output points in
+  (output_filename sample.dat)
+
+  ;; flag whether or not to emit progress to console
+  (log_progress 1)
+)
