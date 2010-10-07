@@ -3,13 +3,14 @@ module DLA.Vec3 where
 
 import DLA.Rmonad
 
-data Vec3 = Vec3 !Double !Double !Double
+data Vec3 = Vec3 {-# UNPACK #-}!Double {-# UNPACK #-}!Double {-# UNPACK #-}!Double
   deriving Show
 
 --
 -- for math, see : http://www.cs.cmu.edu/~mws/rpos.html
 --
 randUnitVec :: DLAMonad Vec3
+{-# INLINE randUnitVec #-}
 randUnitVec = do
   phi <- nextF (2.0 * pi)  -- phi ranges from 0.0 to 2.0*pi
   z <- nextF 2.0
@@ -18,7 +19,8 @@ randUnitVec = do
   return $ Vec3 (rct*(cos phi)) (rct*(sin phi)) z
 
 randVec :: Double -> DLAMonad Vec3
-randVec r = do
+{-# INLINE randVec #-}
+randVec !r = do
   uv <- randUnitVec
   return $ vecScale uv r
 
