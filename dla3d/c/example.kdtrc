@@ -1,16 +1,18 @@
 ;; example parameters
 (
+  (seed 11)
+
   ;; number of particles
-  (n 1000)
+  (n 10000)
 
   ;; maximum time to run before terminating computation
   (max_secs 1000)
 
   ;; collision epsilon
-  (epsilon 0.02)
+  (epsilon 0.05)
 
   ;; step size for random walk
-  (step_size 0.02)
+  (step_size 0.075)
 
   ;; stickiness parameter, uniform across all points
   (stickiness 1.0)
@@ -29,5 +31,5 @@
   (output_filename sample.dat)
 
   ;; flag whether or not to emit progress to console
-  (log_progress 0)
+  (log_progress 1)
 )

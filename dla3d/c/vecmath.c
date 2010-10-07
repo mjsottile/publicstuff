@@ -102,7 +102,7 @@ char *vec_str(vec *v, char *buff) {
 	int i=0;
 	strcpy(buff, "");
 	for(i=0; i < KDT_DIM; i++) {
-		sprintf(buff + strlen(buff), "%lf ", v->coord[i]);
+		sprintf(buff + strlen(buff), "%f ", v->coord[i]);
 	}
 	return buff;
 }
