@@ -15,5 +15,6 @@ main = defaultMain [
         , bench "opt3" $ whnfIO $ runner "optimized-haskell3/dist/build/DLA/DLA params.in test.dat" 
         , bench "opt4" $ whnfIO $ runner "optimized-haskell4/dist/build/DLA/DLA params.in test.dat" 
         , bench "opt5" $ whnfIO $ runner "optimized-haskell5/dist/build/DLA/DLA params.in test.dat" 
-        , bench "opt6" $ whnfIO $ runner "optimized-haskell6/dist/build/DLA/DLA params.in test.dat" ]
+        , bench "opt6" $ whnfIO $ runner "optimized-haskell6/dist/build/DLA/DLA params.in test.dat" 
+        , bench "opt7" $ whnfIO $ runner "optimized-haskell7/dist/build/DLA/DLA params.in test.dat" ]
        ]
