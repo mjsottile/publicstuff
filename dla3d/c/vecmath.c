@@ -12,16 +12,17 @@
 #include <math.h>
 #include <string.h>
 #include "vecmath.h"
+#include "mt-wrap.h"
 
-inline float vec_fmax(float f1, float f2) {
+inline double vec_fmax(double f1, double f2) {
 	return f1 > f2 ? f1 : f2;
 }
 
-inline float vec_fmin(float f1, float f2) {
+inline double vec_fmin(double f1, double f2) {
 	return f1 < f2 ? f1 : f2;
 }
 
-inline float vec_length(vec *a) {
+inline double vec_length(vec *a) {
 	return sqrtf(vec_dot_prod(a, a));
 }
 
@@ -46,16 +47,16 @@ inline void vec_sub(vec *dst, vec *a, vec *b) {
 	}
 }
 
-inline float vec_dot_prod(vec *a, vec *b) {
+inline double vec_dot_prod(vec *a, vec *b) {
 	int i;
-	float sum = 0.0;
+	double sum = 0.0;
 	for(i=0; i < KDT_DIM; i++) {
 		sum += a->coord[i] * b->coord[i];
 	}
 	return sum;
 }
 
-inline void vec_scalar_mult(vec *dst, vec *a, float x) {
+inline void vec_scalar_mult(vec *dst, vec *a, double x) {
 	int i;
 	for(i=0; i < KDT_DIM; i++) {
 		dst->coord[i] = a->coord[i] * x;
@@ -79,21 +80,21 @@ inline void vec_zero(vec *dst) {
 inline void vec_rand_unit(vec *dst) {
 	if(KDT_DIM == 2) {
 		// my trig sucks, this is from http://www.cs.cmu.edu/~mws/rpos.html
-		float phi = (float)random() / (float)RAND_MAX * (2.0f * M_PI);
-		dst->coord[0] = cos(phi);
-		dst->coord[1] = sin(phi);
+	  double phi = randomdouble() * (2.0f * M_PI);
+	  dst->coord[0] = cos(phi);
+	  dst->coord[1] = sin(phi);
 	}
 	else if(KDT_DIM == 3) {
-		// my trig sucks, this is from http://www.cs.cmu.edu/~mws/rpos.html
-		float phi = (float)random() / (float)RAND_MAX * (2.0f * M_PI);
-		float z = (float)random() / (float)RAND_MAX * 2.0f - 1.0f;
-		float theta = asin(z);
-		dst->coord[0] = cos(theta) * cos(phi);
-		dst->coord[1] = cos(theta) * sin(phi);
-		dst->coord[2] = z;
+	  // my trig sucks, this is from http://www.cs.cmu.edu/~mws/rpos.html
+	  double phi = randomdouble() * (2.0f * M_PI);
+	  double z = randomdouble() * 2.0f - 1.0f;
+	  double theta = asin(z);
+	  dst->coord[0] = cos(theta) * cos(phi);
+	  dst->coord[1] = cos(theta) * sin(phi);
+	  dst->coord[2] = z;
 	}
 	else {
-		fprintf(stderr, "Random unit vector not defined for KDT_DIM=%d\n", KDT_DIM);
+	  fprintf(stderr, "Random unit vector not defined for KDT_DIM=%d\n", KDT_DIM);
 	}
 }
 

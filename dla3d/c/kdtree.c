@@ -100,7 +100,7 @@ void kdt_range_search(tree_node *root, point *min, point *max, point_list *resul
 	return kdt_range_search_rec(root, min, max, result, 0);
 }
 
-int kdt_collision_detect(tree_node *root, point *start, point *end, point *c, float epsilon, point_list *pts) {
+int kdt_collision_detect(tree_node *root, point *start, point *end, point *c, double epsilon, point_list *pts) {
 	int i;
 	point rmin, rmax;
 	for(i=0; i < KDT_DIM; i++) {
@@ -117,10 +117,10 @@ int kdt_collision_detect(tree_node *root, point *start, point *end, point *c, fl
 		vec_sub(&b, pt, start);
 		// Collisions should be ordered, with the lowest xhat value being the first
 		// currently the first collision detected is returned, with detections in random order
-		float xhat = vec_dot_prod(&a, &b) / vec_dot_prod(&a, &a);
+		double xhat = vec_dot_prod(&a, &b) / vec_dot_prod(&a, &a);
 		vec_scalar_mult(&p, &a, xhat);
 		vec_sub(&e, &p, &b);
-		float sqrd_dist = vec_dot_prod(&e, &e);
+		double sqrd_dist = vec_dot_prod(&e, &e);
 		if(sqrd_dist < epsilon * epsilon) {
 			vec_add(c, start, &p);
 			return 1;

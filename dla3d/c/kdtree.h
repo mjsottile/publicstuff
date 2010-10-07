@@ -62,7 +62,7 @@ void kdt_range_search(tree_node *root, point *min, point *max, point_list *resul
  Collision detection on a point moving from start to end
  Returns 1 if a collision occurs (and loads c with the location), 0 otherwise (with c undefined)
  */
-int kdt_collision_detect(tree_node *root, point *start, point *end, point *c, float epsilon, point_list *p);
+int kdt_collision_detect(tree_node *root, point *start, point *end, point *c, double epsilon, point_list *p);
 
 /*
  Simple test for whether the given point lies within the rectilinear space defined by min and max
