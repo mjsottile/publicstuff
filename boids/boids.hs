@@ -152,12 +152,12 @@ sParam = 0.1
 sScale = 1.25
 
 aParam = 1.0 / 1.8
-vLimit = 0.01 * (max (maxx-minx) (maxy-miny))
+vLimit = 0.0025 * (max (maxx-minx) (maxy-miny))
 epsilon = 0.40
-maxx = 2.0
-maxy = 2.0
-minx = -2.0
-miny = -2.0
+maxx = 8.0
+maxy = 8.0
+minx = -8.0
+miny = -8.0
 
 
 {--
@@ -329,7 +329,7 @@ iteration vp step w =
 main :: IO ()
 main = do
   let w = World { width = (maxx-minx), height = (maxy-miny), pixWidth = 700, pixHeight = 700 }
-      bs = initialize 150 10.0 0.5
+      bs = initialize 500 10.0 0.5
       t = foldl (\t b -> kdtAddPoint t (position b) b) newKDTree bs
   simulateInWindow
     "Boids"
