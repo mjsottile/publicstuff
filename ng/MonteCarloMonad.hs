@@ -1,3 +1,8 @@
+--
+-- monte carlo monad
+--
+-- matt@galois.com
+--
 module MonteCarloMonad where
 
 import Control.Monad.State

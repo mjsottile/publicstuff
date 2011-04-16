@@ -100,17 +100,6 @@ newWord w = do
   writeIORef wordGenerator (cur+1)
   return cur
   
---
--- now, given a set of individuals, pick them in pairs to update the
--- state of the world
---
-timestep :: [Individual] -> NGState -> IO [Individual]
-timestep w s = do
-  let n = length w
-  pairs <- pairify [0..(n-1)] s
-  w' <- mapM (\(a,b) -> testWord (w !! a, w !! b) s) pairs
-  return $ foldl1 (++) $ map (\(a,b) -> [a,b]) w'
-  
 timestepOnePair :: [Individual] -> NGState -> IO [Individual]
 timestepOnePair w s = do
   let n = length w
@@ -121,20 +110,6 @@ timestepOnePair w s = do
   (aval',bval') <- testWord (aval,bval) s
   return (aval':bval':w'')
   
---
--- randomly pair up elements from a sequence
---
-pairify :: [Int] -> NGState -> IO [(Int,Int)]
-pairify []      s = return []
-pairify indices s = do
-  let n = length indices
-  a <- getInt s n
-  let (aval, i') = removeAt a indices
-  b <- getInt s (n-1)
-  let (bval, i'') = removeAt b i'        
-  remainder <- pairify i'' s
-  return $ [(aval,bval)] ++ remainder
-
 --
 -- remove an element from a list, assuming zero indexing
 -- see: http://www.haskell.org/haskellwiki/99_questions/Solutions/20
@@ -151,26 +126,25 @@ removeAt k xs = case back of
 newIndividuals :: Int -> [Individual]
 newIndividuals n = replicate n [] 
 
+--
+-- count unique words known amongst all individuals
+--
+data Tree = Node Word Tree Tree | Empty
 
-{-
-numUnique :: [Individual] -> Int
-numUnique p =
-  let removeDups []     accum    = accum
-      removeDups (x:xs) []       = removeDups xs [x]
-      removeDups (x:xs) a@(y:ys) = if (x==y) then removeDups xs a
-                                             else removeDups xs (x:a)
-      flattened = foldl1 (++) p
-      fsort = sort flattened
-      fsnodup = removeDups fsort []
-  in
-    length fsnodup
--}
+-- number of unique words is number of nodes in a tree containing
+-- no duplicates
+numUnique p = sizeTree $ foldl (\t ps -> foldl insTree t ps) Empty p
 
---numUnique :: [Individual] -> Int
---numUnique p = length $ nub $ foldl1 (++) p
-numUnique :: [Individual] -> Int
-numUnique p = length $ foldl1 union p
+{-# INLINE insTree #-}
+insTree :: Tree -> Word -> Tree
+insTree Empty          i         = Node i Empty Empty
+insTree n@(Node j l r) i | i==j  = n
+insTree n@(Node j l r) i | i<j   = Node j (insTree l i) r
+insTree n@(Node j l r) i | i>j   = Node j l (insTree r i)
 
+{-# INLINE sizeTree #-}
+sizeTree Empty        = 0
+sizeTree (Node _ l r) = 1 + (sizeTree l) + (sizeTree r)
 
 
 goNTimes :: [Individual] -> NGState -> Int -> IO [Int]
