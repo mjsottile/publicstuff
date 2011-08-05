@@ -26,13 +26,21 @@ data KDTreeNode a =
   | Node !(KDTreeNode a) !Vec2 !a !(KDTreeNode a)
   deriving Show
 
+kdtreeToListOld :: (KDTreeNode a) -> [a]
+kdtreeToListOld Empty = []
+kdtreeToListOld (Node l _ x r) = [x]++(kdtreeToList l)++(kdtreeToList r)
+
 kdtreeToList :: (KDTreeNode a) -> [a]
-kdtreeToList Empty = []
-kdtreeToList (Node l _ x r) = [x]++(kdtreeToList l)++(kdtreeToList r)
+kdtreeToList k = mapKDTree k id
+
+mapKDTreeOld :: KDTreeNode a -> (a -> b) -> [b]
+mapKDTreeOld Empty _ = []
+mapKDTreeOld (Node l p n r) f = (f n):((mapKDTreeOld l f)++(mapKDTreeOld r f))
 
 mapKDTree :: KDTreeNode a -> (a -> b) -> [b]
 mapKDTree Empty _ = []
-mapKDTree (Node l p n r) f = (f n):((mapKDTree l f)++(mapKDTree r f))
+mapKDTree (Node Empty p n r) f = (f n) : (mapKDTree r f)
+mapKDTree (Node (Node l1 p1 n1 r1) p n r) f = mapKDTree (Node l1 p1 n1 (Node r1 p n r)) f
 
 printVec :: Vec2 -> Handle -> Int -> IO ()
 printVec (Vec2 x y) h i = do 

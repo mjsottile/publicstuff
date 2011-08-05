@@ -329,7 +329,7 @@ iteration vp step w =
 main :: IO ()
 main = do
   let w = World { width = (maxx-minx), height = (maxy-miny), pixWidth = 700, pixHeight = 700 }
-      bs = initialize 500 10.0 0.5
+      bs = initialize 1500 10.0 0.5
       t = foldl (\t b -> kdtAddPoint t (position b) b) newKDTree bs
   simulateInWindow
     "Boids"

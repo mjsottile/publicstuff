@@ -1,5 +1,5 @@
 all:
-	ghc --make -O3 -fforce-recomp boids.hs
+	ghc --make -O2 -fforce-recomp boids.hs
 
 clean:
 	rm -f boids
