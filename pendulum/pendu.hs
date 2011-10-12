@@ -1,3 +1,8 @@
+--
+-- harmonic motion model
+--
+-- matthew sottile (matt@galois.com), 2011
+--
 import Graphics.Gloss
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Simulate
@@ -10,12 +15,12 @@ winWidth  = 600
 winHeight :: Int
 winHeight = 600
 
-cradius   = 5
+cradius   = 3
 
 -- physical parameters
-eta = 0.0
+eta = 0.0002
 g = 9.80665
-dt = 0.0025
+dt = 0.02
 
 f :: Double -> Double -> Double -> Double -> Double
 f theta omega t l = (-eta)*omega - (g/l)*sin(theta)
@@ -49,12 +54,18 @@ renderPendulum (theta, omega, t, l) =
   in
     Pictures $ [
       Color lineclr $
-        Line [(0,0), (x*twidth,y*theight)],
+        Line [(0,0), (x*twidth*3,y*theight*3)],
       Color clr $
-        Translate (x*twidth) (y*theight) $
+        Translate (x*twidth*3) (y*theight*3) $
         Circle cradius ]
 
 renderPendulums ps = Pictures $ map renderPendulum ps
+
+lengths :: Int -> Double -> Double -> [Double]
+lengths n t l =
+  let thelen curn = (t/((l+((fromIntegral n)-curn)) * 2.0 * pi))**2 * g
+  in
+      [thelen (fromIntegral i) | i <- [1..n]]
 
 main :: IO ()
 main = do
@@ -63,14 +74,13 @@ main = do
       omega0 = 0
       t = 0
       npendu = 15
-      starts = map (\i -> (theta0, omega0, t, (1+i/npendu)/2)) [1..npendu]
-      --seq = iterate solve (theta0, omega0, t, 1)
+      starts = map (\i -> (theta0, omega0, t, i)) (lengths npendu 54.0 60.0)
   simulateInWindow
     "Pendulums"
     (winWidth, winHeight)
     (1, 1)
     (greyN 0.1)
-    120
+    45
     starts
     renderPendulums
     (\vp f m -> map solve m)
