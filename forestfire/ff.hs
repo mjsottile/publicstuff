@@ -32,14 +32,14 @@ seed = 2
 
 main = do
   getArgsAndInitialize
-  let w = (fromIntegral initialWindowSizeX :: GLsizei)
-  let h = (fromIntegral initialWindowSizeY :: GLsizei)
+  let w = (fromIntegral initialWindowSizeX)
+  let h = (fromIntegral initialWindowSizeY)
   initialDisplayMode $= [RGBMode, DoubleBuffered]
   initialWindowSize $= Size w h
   (Size screenSizeX screenSizeY) <- get screenSize
   let initialPos = Position x y where
-      x = (screenSizeX - w) `div` 2
-      y = (screenSizeY - h) `div` 2
+      x = ((fromIntegral screenSizeX - fromIntegral w) `div` 2)
+      y = ((fromIntegral screenSizeY - fromIntegral h) `div` 2)
   initialWindowPosition $= initialPos
   createWindow "Forest Fire!"
   let worldSize = FF.Size (initialWindowSizeX `div` pixelsPerUnit) 
