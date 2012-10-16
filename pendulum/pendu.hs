@@ -4,8 +4,9 @@
 -- matthew sottile (matt@galois.com), 2011
 --
 import Graphics.Gloss
+import Graphics.Gloss.Data.Display
 import Graphics.Gloss.Data.Picture
-import Graphics.Gloss.Interface.Simulate
+import Graphics.Gloss.Interface.IO.Simulate
 import GHC.Float
 
 -- window parameters
@@ -25,12 +26,12 @@ dt = 0.02
 f :: Double -> Double -> Double -> Double -> Double
 f theta omega t l = (-eta)*omega - (g/l)*sin(theta)
 
-solve :: (Double, Double, Double, Double) -> (Double, Double, Double, Double)
-solve (theta, omega, t, l) =
-  (theta + (1/6)*(k1a + 2*k2a + 2*k3a + k4a),
-   omega + (1/6)*(k1b + 2*k2b + 2*k3b + k4b),
-   t',
-   l)
+solve :: (Double, Double, Double, Double) -> IO (Double, Double, Double, Double)
+solve (theta, omega, t, l) = do
+  return (theta + (1/6)*(k1a + 2*k2a + 2*k3a + k4a),
+          omega + (1/6)*(k1b + 2*k2b + 2*k3b + k4b),
+          t',
+          l)
   where
     t' = t + dt
     k1a = omega * dt
@@ -59,7 +60,7 @@ renderPendulum (theta, omega, t, l) =
         Translate (x*twidth*3) (y*theight*3) $
         Circle cradius ]
 
-renderPendulums ps = Pictures $ map renderPendulum ps
+renderPendulums ps = do return (Pictures $ map renderPendulum ps)
 
 lengths :: Int -> Double -> Double -> [Double]
 lengths n t l =
@@ -75,12 +76,10 @@ main = do
       t = 0
       npendu = 15
       starts = map (\i -> (theta0, omega0, t, i)) (lengths npendu 54.0 60.0)
-  simulateInWindow
-    "Pendulums"
-    (winWidth, winHeight)
-    (1, 1)
+  simulateIO
+    (InWindow "Pendulums" (winWidth, winHeight) (1, 1))
     (greyN 0.1)
     45
     starts
     renderPendulums
-    (\vp f m -> map solve m)
+    (\vp f m -> mapM solve m)
