@@ -26,7 +26,7 @@ data World = World { wData :: U.Vector CellState, wSize :: Size }
 idx :: Int -> Int -> Size -> Int
 idx x y (Size w h) = ((y `mod` h)*w)+(x `mod` w)
 
--- turn 1D offset into coordiantes within region of given size
+-- turn 1D offset into coordinates within region of given size
 unidx :: Int -> Size -> (Int,Int)
 unidx i (Size w h) = (i `mod` w, i `div` w)
 
